@@ -1,6 +1,6 @@
 using SharpNBT;
 
-namespace IceRailHelper
+namespace IceRailHelper.IceRail
 {
     internal static class Program
     {
@@ -14,7 +14,7 @@ namespace IceRailHelper
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
             //Application.Run(new Form());
-            
+
         }
     }
 }
