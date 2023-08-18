@@ -15,15 +15,13 @@ namespace Ice_Highway_Helper.IceHighway
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
             //Application.Run(new Form());
-            Calculation test = new Calculation(0, 0, -5, 5, true);
-            V2d c0 = test.getCoordinate(1);
-            Debug.WriteLine(c0.x + ", " + c0.z);
-            V2d c1 = test.getCoordinate(3);
-            Debug.WriteLine(c1.x + ", " + c1.z);
-            V2d c2 = test.getCoordinate(5);
-            Debug.WriteLine(c2.x + ", " + c2.z);
-            V2d c3 = test.getCoordinate(9);
-            Debug.WriteLine(c3.x + ", " + c3.z);
+            double x0 = 0, z0 = 2, x1 = 4, z1 = -4;
+            double rad = Math.Atan2(z1 - z0, x1 - x0);
+            double distance = 5;
+            double x = x0 + distance * Math.Cos(rad);
+            double z = z0 + distance * Math.Sin(rad);
+            Debug.WriteLine("x = " + x);
+            Debug.WriteLine("z = " + z);
         }
     }
 }

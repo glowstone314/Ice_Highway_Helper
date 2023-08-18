@@ -1,4 +1,4 @@
-﻿using System.Numerics;
+﻿using System.Collections;
 using static System.Math;
 
 namespace Ice_Highway_Helper.IceHighway
@@ -8,7 +8,7 @@ namespace Ice_Highway_Helper.IceHighway
         private int x0, z0, x1, z1;
         private bool deg140625;
         private Calculation calculation;
-        private int[] ices;
+        private ArrayList ices = new ArrayList();
 
         public IceHighway(int x0, int z0, int x1, int z1, bool deg140625) { 
             this.x0 = x0;
@@ -25,27 +25,52 @@ namespace Ice_Highway_Helper.IceHighway
             double realDeg = calculation.getRealDeg();
             if (realDeg == 90.0 || realDeg == -90.0)
             {
-                ices = new int[Abs(z0-z1) / interval];
+                //ices = new int[Abs(z0-z1) / interval];
                 for (int i = 0; i < Abs(z0 - z1); i += interval)
                 {
-                    ices[i / interval] = calculation.getCoordinate(i).z;
+                    ices.Add(calculation.getCoordinate(i));
                 }
                 return new D(0, realDeg, x1, z1);
             }
-            else if (realDeg == 0.0)
+            else if (realDeg == 0.0 || realDeg == 180.0)
             {
-                ices = new int[Abs(x0 - x1) / interval];
                 for (int i = 0; i < Abs(x0 - x1); i += interval)
                 {
-                    ices[i / interval] = calculation.getCoordinate(i).x;
+                    ices.Add(calculation.getCoordinate(i));
                 }
-                return new D(0, 0.0, x1, z1);
+                return new D(0, realDeg, x1, z1);
             }
             double idealDeg = Calculation.getDeg(Atan2(z1 - z0, x1 - x0));
-            
+
             // 计算俩线路夹角，计算偏移距离、冰道实际长度、冰道终点坐标
+            V2d endPoint;
+            D d;
+            if (deg140625)
+            {
+                double angle = Abs(realDeg - idealDeg);
+                if (angle > 0.703125) angle = Abs(angle - 360.0);
+                double idealDistance = Sqrt(Pow(x1 - x0, 2) + Pow(z1 - z0, 2));
+                double deviation = idealDistance * Sin(Calculation.getRad(angle));
+                double realDistance = deviation / Tan(Calculation.getRad(angle));
+                double endX = x0 + 0.5 + realDistance * Cos(Calculation.getRad(realDeg));
+                double endZ = z0 + 0.5 + realDistance * Sin(Calculation.getRad(realDeg));
+                endPoint = new V2d(endX, endZ);
+                d = new D(deviation, realDeg, endPoint);
+            }
+            else
+            {
+                endPoint = new V2d(x1, z1);
+                d = new D(0.0, realDeg, x1, z1);
+            }
 
             // 根据终点坐标计算冰道完整路径
+            int longerSide = Max(Abs(x0 - endPoint.x), Abs(z0 - endPoint.z));
+            //ices = new int[longerSide / interval];
+            for (int i = 0; i < longerSide; i+=interval)
+            {
+                ices.Add(calculation.getCoordinate(i));
+            }
+            return d;
         }
     }
 
@@ -59,6 +84,13 @@ namespace Ice_Highway_Helper.IceHighway
             this.deviation = deviation;
             this.buildDeg = buildDeg;
             this.endpoint = new V2d(x, z);
+        }
+
+        public D(double deviation, double buildDeg, V2d endpoint)
+        {
+            this.deviation = deviation;
+            this.buildDeg = buildDeg;
+            this.endpoint = endpoint;
         }
     }
 }
