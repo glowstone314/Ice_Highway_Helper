@@ -1,4 +1,4 @@
-﻿namespace IceRailHelper
+﻿namespace Ice_Highway_Helper.IceHighway
 {
     partial class Form
     {

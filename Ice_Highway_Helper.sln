@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.7.34009.444
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IceRailHelper", "IceRailHelper.csproj", "{99CFC68A-EB1D-4084-B546-14DC08D5203C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ice_Highway_Helper", "Ice_Highway_Helper.csproj", "{99CFC68A-EB1D-4084-B546-14DC08D5203C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

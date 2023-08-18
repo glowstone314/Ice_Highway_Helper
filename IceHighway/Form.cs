@@ -1,4 +1,4 @@
-namespace IceRailHelper
+namespace Ice_Highway_Helper.IceHighway
 {
     public partial class Form : System.Windows.Forms.Form
     {
