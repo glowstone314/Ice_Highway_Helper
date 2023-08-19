@@ -31,7 +31,7 @@ namespace Ice_Highway_Helper.IceHighway
             return deg;
         }
 
-        public V2d getCoordinate(int index)
+        public V3d getCoordinate(int index)
         {
             int dx = x0 < x1 ? index : -index;
             int dz = z0 < z1 ? index : -index;
@@ -39,15 +39,15 @@ namespace Ice_Highway_Helper.IceHighway
             {
                 if (deg == 90.0 || deg == -90.0)
                 {
-                    return new V2d(x0, z0 + dz);
+                    return new V3d(x0, 0, z0 + dz);
                 }
                 else if ( getZbyX )
                 {
-                    return new V2d(x0 + dx, z0 + dx * Tan(getRad(deg)));
+                    return new V3d(x0 + dx, 0, z0 + dx * Tan(getRad(deg)));
                 }
                 else
                 {
-                    return new V2d(x0 + dz / Tan(getRad(deg)), z0 + dz);
+                    return new V3d(x0 + dz / Tan(getRad(deg)), 0, z0 + dz);
                 }
             }
             else
@@ -56,19 +56,19 @@ namespace Ice_Highway_Helper.IceHighway
                 {
                     if (z1 == z0)
                     {
-                        return new V2d(x0 + dx, z0);
+                        return new V3d(x0 + dx, 0, z0);
                     }
                     double z = (z1 - z0) * index / (x1 - x0) + z0;
-                    return new V2d(x0 + dx, z);
+                    return new V3d(x0 + dx, 0, z);
                 }
                 else
                 {
                     if (x1 == x0)
                     {
-                        return new V2d(x0, z0 + dz);
+                        return new V3d(x0, 0, z0 + dz);
                     }
                     double x = (x1 - x0) * index / (z1 - z0) + x0;
-                    return new V2d(x, z0 + dz);
+                    return new V3d(x, 0, z0 + dz);
                 }
             }
         }
@@ -83,22 +83,5 @@ namespace Ice_Highway_Helper.IceHighway
             return deg * PI / 180.0;
         }
 
-    }
-
-    public class V2d
-    {
-        public int x;
-        public int z;
-
-        public V2d(int x, int z)
-        {
-            this.x = x;
-            this.z = z;
-        }
-        public V2d(double x, double z)
-        {
-            this.x = (int)Floor(x);
-            this.z = (int)Floor(z);
-        }
     }
 }

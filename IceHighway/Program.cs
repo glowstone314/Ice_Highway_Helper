@@ -15,13 +15,12 @@ namespace Ice_Highway_Helper.IceHighway
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
             //Application.Run(new Form());
-            double x0 = 0, z0 = 2, x1 = 4, z1 = -4;
-            double rad = Math.Atan2(z1 - z0, x1 - x0);
-            double distance = 5;
-            double x = x0 + distance * Math.Cos(rad);
-            double z = z0 + distance * Math.Sin(rad);
-            Debug.WriteLine("x = " + x);
-            Debug.WriteLine("z = " + z);
+            V2d v0 = new V2d(0, 0);
+            V2d v1 = new V2d(0, 0);
+            V2d v2 = new V2d(3, 2);
+            Debug.WriteLine("v0 e v1" + v0.Equals(v1));
+            Debug.WriteLine("v1 e v2" + v1.Equals(v2));
+            Debug.WriteLine("v0 e v2" + v0.Equals(v2));
         }
     }
 }
