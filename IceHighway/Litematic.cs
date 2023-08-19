@@ -61,13 +61,84 @@ namespace Ice_Highway_Helper.IceHighway
             blocks.Add(v, block);
         }
 
+        public void buildForIceHighway(int begX, int begZ, int endX, int endZ)
+        {
+            if (begX == endX || begZ == endZ)
+            {
+                regions.Add("0", extractRegion(
+                    new V3d(begX, minY, begZ), new V3d(endX, maxY, endZ)));
+                return;
+            }
+
+            int maxSide = Max(maxX - minX, maxZ - minZ);
+            int regionCount = (int) Round(maxSide / 16.0);
+            if (regionCount > 1)
+            {
+                if (Abs(begX - endX) > Abs(begZ - endZ))
+                {
+                    int localBegX = begX, localBegZ = begZ;
+                    for (int i = 0; i < regionCount; i++)
+                    {
+                        int localEndX = (endX - begX) * (i + 1) / regionCount;
+                        V3d localEnd = new V3d(localEndX, 0, 
+                            (endZ - begZ) * 32 / (endX - begX) * localEndX / 32);
+                        localEnd = findBlock(localEnd);
+                        if ()
+                    }
+                }
+            }
+        }
+
+        private V3d findBlock(V3d pos)
+        {
+            if (blocks.ContainsKey(pos)) return pos;
+            for (int i = -1; i <= 1; i++)
+            {
+                for (int j = -1; j <= 1; j++)
+                {
+                    V3d npos = pos.getNewV3d(i, 0, j);
+                    if (blocks.ContainsKey(npos)) return npos;
+                }
+            }
+            return null;
+        }
+
+        private LiteRegion extractRegion(V3d beg, V3d end)
+        {
+            LiteRegion region = new LiteRegion(beg, end);
+            for (int x = Min(beg.x, end.x); x <= Max(beg.x, end.x); x++)
+            {
+                for (int y = Min(beg.y, end.y); y <= Max(beg.y, end.y); y++)
+                {
+                    for (int z = Min(beg.z, end.z); z <= Max(beg.z, end.z); z++)
+                    {
+                        V3d position = new V3d(x, y, z);
+                        if (blocks.ContainsKey(position))
+                            region.setBlockByRealPosition(position, (Block)blocks[position]);
+                        else
+                            region.setBlockByRealPosition(position, Block.air);
+                    }
+                }
+            }
+            return region;
+        }
+
     }
 
     internal class LiteRegion
     {
         private int posX, posY, posZ;
         private int sizeX, sizeY, sizeZ;
+        private V3d origin;     // “三轴坐标均为最小”的原点
         private Block[] blocks;
+
+        public LiteRegion(V3d begin, V3d end)
+        {
+            posX = begin.x; posY = begin.y; posZ = begin.z;
+            sizeX = end.x - begin.x; sizeY = end.y - begin.y; sizeZ = end.z - begin.z;
+            origin = new V3d(Min(begin.x, end.x), Min(begin.y, end.y), Min(begin.z, end.z));
+            blocks = new Block[Abs(sizeX * sizeY * sizeZ)];
+        }
 
         public bool setBlock(int x, int y, int z, Block block)
         {
@@ -80,6 +151,21 @@ namespace Ice_Highway_Helper.IceHighway
                 blocks[x + z * Abs(sizeZ) + y * Abs(sizeX * sizeZ)] = block;
                 return true;
             }
+        }
+
+        public bool setBlockByRealPosition(V3d position, Block block)
+        {
+            if (position.x >= origin.x && position.x < origin.x + Abs(sizeX)
+                && position.y >= origin.y && position.y < origin.y + Abs(sizeY)
+                && position.z >= origin.z && position.z < origin.z + Abs(sizeZ))
+            {
+                int localX = position.x - origin.x;
+                int localY = position.y - origin.y;
+                int localZ = position.z - origin.z;
+                blocks[localX + localZ * Abs(sizeZ) + localY * Abs(sizeX * sizeZ)] = block;
+                return true;
+            }
+            return false;
         }
 
         public static int getBits(int amount)
