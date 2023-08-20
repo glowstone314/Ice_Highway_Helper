@@ -15,12 +15,16 @@ namespace Ice_Highway_Helper.IceHighway
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
             //Application.Run(new Form());
-            V2d v0 = new V2d(0, 0);
-            V2d v1 = new V2d(0, 0);
-            V2d v2 = new V2d(3, 2);
-            Debug.WriteLine("v0 e v1" + v0.Equals(v1));
-            Debug.WriteLine("v1 e v2" + v1.Equals(v2));
-            Debug.WriteLine("v0 e v2" + v0.Equals(v2));
+            Debug.WriteLine(LiteRegion.getLongFromBitList(new bool[]{ 
+                true, false, false, false, false, false, false, false,
+                true, false, false, false, false, false, false, false,
+                true, false, false, false, false, false, false, false,
+                true, false, false, false, false, false, false, false,
+                true, false, false, false, false, false, false, false,
+                true, false, false, false, false, false, false, false,
+                true, false, false, false, false, false, false, false,
+                true, false, false, false, false, false, false, true
+            }));
         }
     }
 }

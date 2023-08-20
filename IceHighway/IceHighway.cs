@@ -8,7 +8,7 @@ namespace Ice_Highway_Helper.IceHighway
         private int x0, z0, x1, z1;
         private bool deg140625;
         private Calculation calculation;
-        private ArrayList ices = new ArrayList();
+        private List<V3d> ices = new List<V3d>();
 
         public IceHighway(int x0, int z0, int x1, int z1, bool deg140625) { 
             this.x0 = x0;

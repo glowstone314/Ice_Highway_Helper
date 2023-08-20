@@ -1,10 +1,5 @@
 ﻿using SharpNBT;
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using static System.Math;
 
 namespace Ice_Highway_Helper.IceHighway
@@ -14,8 +9,8 @@ namespace Ice_Highway_Helper.IceHighway
 
         public string author, description, name;
         private int minX, minY, minZ, maxX, maxY, maxZ;
-        private Hashtable regions;
-        private Hashtable blocks;
+        private Dictionary<string, LiteRegion> regions;
+        //private Hashtable blocks;
 
         public Litematic(int x, int y, int z)
         {
@@ -27,7 +22,7 @@ namespace Ice_Highway_Helper.IceHighway
             this.maxZ = z;
         }
 
-        public void addIceBlocks(ArrayList list, Block ice, Block button)
+        public void addIceBlocks(List<V3d> list, Block ice, Block button)
         {
             if (button != null)
             {
@@ -39,18 +34,27 @@ namespace Ice_Highway_Helper.IceHighway
                 if (0 < minY) minY = 0;
                 else if (0 > maxY) maxY = 0;
             }
-            foreach (V3d v in list)
+            V3d begin = list[0];
+            V3d end = list[list.Count - 1];
+            int shorterSide = Min(Abs(begin.x - end.x), Abs(begin.z - end.z));
+            if (shorterSide > 16)
             {
-                if (v.x < minX) minX = v.x;
-                if (v.z < minZ) minZ = v.z;
-                if (v.x > maxX) maxX = v.x;
-                if (v.z > maxZ) maxZ = v.z;
-                blocks.Add(v, ice);
-                if (button != null) blocks.Add(v.getNewV3d(0, 1, 0), button);
+                int count = (shorterSide * 2 / 16 + 1) / 2;
+                for (int i = 0; i < count; i++)
+                {
+                    int localBegIndex = list.Count * i / count;
+                    int localEndIndex = list.Count * (i + 1) / count - 1;
+                    regions.Add(regions.Count.ToString(), 
+                        new LiteRegion(list, localBegIndex, localEndIndex, begin, ice, button));
+                }
+            }
+            else
+            {
+                regions.Add(regions.Count.ToString(), new LiteRegion(list, 0, list.Count - 1, begin, ice, button));
             }
         }
 
-        public void setBlock(V3d v, Block block)
+        /*public void setBlock(V3d v, Block block)
         {
             if (v.x < minX) minX = v.x;
             else if (v.x > maxX) maxX = v.x;
@@ -59,69 +63,7 @@ namespace Ice_Highway_Helper.IceHighway
             if (v.z < minZ) minZ = v.z;
             else if (v.z > maxZ) maxZ = v.z;
             blocks.Add(v, block);
-        }
-
-        public void buildForIceHighway(int begX, int begZ, int endX, int endZ)
-        {
-            if (begX == endX || begZ == endZ)
-            {
-                regions.Add("0", extractRegion(
-                    new V3d(begX, minY, begZ), new V3d(endX, maxY, endZ)));
-                return;
-            }
-
-            int maxSide = Max(maxX - minX, maxZ - minZ);
-            int regionCount = (int) Round(maxSide / 16.0);
-            if (regionCount > 1)
-            {
-                if (Abs(begX - endX) > Abs(begZ - endZ))
-                {
-                    int localBegX = begX, localBegZ = begZ;
-                    for (int i = 0; i < regionCount; i++)
-                    {
-                        int localEndX = (endX - begX) * (i + 1) / regionCount;
-                        V3d localEnd = new V3d(localEndX, 0, 
-                            (endZ - begZ) * 32 / (endX - begX) * localEndX / 32);
-                        localEnd = findBlock(localEnd);
-                        if ()
-                    }
-                }
-            }
-        }
-
-        private V3d findBlock(V3d pos)
-        {
-            if (blocks.ContainsKey(pos)) return pos;
-            for (int i = -1; i <= 1; i++)
-            {
-                for (int j = -1; j <= 1; j++)
-                {
-                    V3d npos = pos.getNewV3d(i, 0, j);
-                    if (blocks.ContainsKey(npos)) return npos;
-                }
-            }
-            return null;
-        }
-
-        private LiteRegion extractRegion(V3d beg, V3d end)
-        {
-            LiteRegion region = new LiteRegion(beg, end);
-            for (int x = Min(beg.x, end.x); x <= Max(beg.x, end.x); x++)
-            {
-                for (int y = Min(beg.y, end.y); y <= Max(beg.y, end.y); y++)
-                {
-                    for (int z = Min(beg.z, end.z); z <= Max(beg.z, end.z); z++)
-                    {
-                        V3d position = new V3d(x, y, z);
-                        if (blocks.ContainsKey(position))
-                            region.setBlockByRealPosition(position, (Block)blocks[position]);
-                        else
-                            region.setBlockByRealPosition(position, Block.air);
-                    }
-                }
-            }
-            return region;
-        }
+        }*/
 
     }
 
@@ -138,6 +80,28 @@ namespace Ice_Highway_Helper.IceHighway
             sizeX = end.x - begin.x; sizeY = end.y - begin.y; sizeZ = end.z - begin.z;
             origin = new V3d(Min(begin.x, end.x), Min(begin.y, end.y), Min(begin.z, end.z));
             blocks = new Block[Abs(sizeX * sizeY * sizeZ)];
+        }
+
+        public LiteRegion(List<V3d> list, int localBegIndex, int localEndIndex, 
+                V3d offset, Block ice, Block button)
+        {
+            V3d begin = list[localBegIndex];
+            V3d end = list[localEndIndex];
+            posX = begin.x; posY = begin.y; posZ = begin.z;
+            sizeX = end.x - begin.x; sizeY = end.y - begin.y; sizeZ = end.z - begin.z;
+            origin = new V3d(Min(begin.x, end.x), Min(begin.y, end.y), Min(begin.z, end.z));
+            blocks = new Block[Abs(sizeX * sizeY * sizeZ)];
+            for (int i = localBegIndex; i <= localEndIndex; i++)
+            {
+                setBlockByRealPosition(list[i], ice);
+                if (button != null) setBlockByRealPosition(list[i].getNewV3d(0, 1, 0), button);
+            }
+            posX -= offset.x;
+            posY -= offset.y;
+            posZ -= offset.z;
+            origin.x -= offset.x;
+            origin.y -= offset.y;
+            origin.z -= offset.z;
         }
 
         public bool setBlock(int x, int y, int z, Block block)
@@ -166,6 +130,61 @@ namespace Ice_Highway_Helper.IceHighway
                 return true;
             }
             return false;
+        }
+
+        private Dictionary<Block, int> getBlockPalette()
+        {
+            Dictionary<Block, int> palette = new Dictionary<Block, int>();
+            foreach (Block block in blocks)
+            {
+                if (block == null) continue;
+                if (palette.ContainsKey(block)) palette.Add(block, palette.Count);
+            }
+            if (palette.ContainsKey(Block.air)) palette.Add(Block.air, palette.Count);
+            return palette;
+        }
+
+        private LongArrayTag getBlockStates(Dictionary<Block, int> palette)
+        {
+            int bitsPerBlock = getBits(palette.Count);  // 每个方块占用多少位
+            int allBits = bitsPerBlock * blocks.Length; // 所有方块占用多少位
+            int longs = allBits / 64 + allBits % 64 == 0 ? 0 : 1;   // 需要多少个long，向上取整
+            List<bool> states = new List<bool>();
+            foreach (Block block in blocks)             // 遍历方块存入临时bitList
+               addBlockInBitList(states, palette[block], bitsPerBlock);
+
+            LongArrayTag tag = new LongArrayTag("BlockStates");
+            for (int i = 0; i < longs; i++)
+            {
+                bool[] local = new bool[64];
+                states.CopyTo(i * 64, local, 0, Min(64, states.Count - i * 64));
+                tag.Add(getLongFromBitList(local));
+            }
+            return tag;
+        }
+
+        private static void addBlockInBitList(List<bool> list, int block, int bitsPerBlock)
+        {
+            for (int i = 0; i < bitsPerBlock; i++)
+            {
+                list.Add((block >> i & 0b1) == 1);
+            }
+        }
+
+        public static long getLongFromBitList(bool[] bits)
+        {
+            long l = 0L;
+            for (int i = 0; i < Min(64, bits.Length); i++)
+            {
+                l |= getBySingleBit(bits[i]) << i;
+            }
+            return l;
+        }
+
+        private static long getBySingleBit(bool bit)
+        {
+            if (bit) return 1L;
+            else return 0L;
         }
 
         public static int getBits(int amount)
