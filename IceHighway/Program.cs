@@ -15,16 +15,21 @@ namespace Ice_Highway_Helper.IceHighway
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
             //Application.Run(new Form());
-            Debug.WriteLine(LiteRegion.getLongFromBitList(new bool[]{ 
-                true, false, false, false, false, false, false, false,
-                true, false, false, false, false, false, false, false,
-                true, false, false, false, false, false, false, false,
-                true, false, false, false, false, false, false, false,
-                true, false, false, false, false, false, false, false,
-                true, false, false, false, false, false, false, false,
-                true, false, false, false, false, false, false, false,
-                true, false, false, false, false, false, false, true
-            }));
+            IceHighway ice = new IceHighway(-152, 253, -406, 116, true);
+            ice.BuildLitematic("", "", "");
+            D d = ice.build(1, new Block("blue_ice"), 
+                null);
+            Debug.WriteLine("Æ«ÒÆ£º" + d.deviation);
+            Debug.WriteLine("½Ç¶È£º" + d.buildDeg);
+            Debug.WriteLine("ÖÕµãx×ø±ê£º" + d.endpoint.x);
+            Debug.WriteLine("ÖÕµãz×ø±ê£º" + d.endpoint.z);
+            Litematic litematic = ice.GetLitematic();
+            litematic.name = "±ùµÀÖúÊÖ²âÊÔ";
+            litematic.author = "Ice_Highway_Helper";
+            CompoundTag tag = litematic.BuildLitematic();
+            NbtFile.Write("D:\\Minecraft\\schematics\\±ùµÀ²âÊÔ.litematic", tag, 
+                FormatOptions.Java, CompressionType.GZip, 
+                System.IO.Compression.CompressionLevel.Fastest);
         }
     }
 }

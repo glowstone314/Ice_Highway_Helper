@@ -29,6 +29,14 @@ namespace Ice_Highway_Helper.IceHighway
             V2d v = (V2d) obj;
             return this.x == v.x && this.z == v.z;
         }
+
+        public override int GetHashCode()
+        {
+            int result = 1;
+            result = 31 * result + x.GetHashCode();
+            result = 31 * result + z.GetHashCode();
+            return result;
+        }
     }
 
     public class V3d
@@ -57,6 +65,15 @@ namespace Ice_Highway_Helper.IceHighway
             if (obj == null || GetType() != obj.GetType()) return false;
             V3d v = (V3d) obj;
             return this.x == v.x && this.y == v.y && this.z == v.z;
+        }
+
+        public override int GetHashCode()
+        {
+            int result = 1;
+            result = 31 * result + x.GetHashCode();
+            result = 31 * result + y.GetHashCode();
+            result = 31 * result + z.GetHashCode();
+            return result;
         }
     }
 

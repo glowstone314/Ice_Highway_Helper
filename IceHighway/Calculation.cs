@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using static System.Math;
+using static Ice_Highway_Helper.IceHighway.Tools;
 
 namespace Ice_Highway_Helper.IceHighway
 {
@@ -72,16 +73,5 @@ namespace Ice_Highway_Helper.IceHighway
                 }
             }
         }
-
-        public static double getDeg(double rad)
-        {
-            return rad * 180.0 / PI;
-        }
-
-        public static double getRad(double deg) 
-        {
-            return deg * PI / 180.0;
-        }
-
     }
 }

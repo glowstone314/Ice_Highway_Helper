@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SharpNBT;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +14,7 @@ namespace Ice_Highway_Helper.IceHighway
         public static readonly Block air = new Block("minecraft:air");
 
         public string id;
-        public Hashtable properties;
+        public Dictionary<string, string> properties;
         
         // 支持带[属性]的方块
         public Block(string id)
@@ -21,8 +22,8 @@ namespace Ice_Highway_Helper.IceHighway
             if (id.Contains("[") && id.Contains("]"))
             {
                 this.id = getId(id.Substring(0, id.IndexOf('[')));
-                this.properties = new Hashtable();
-                string properties = id.Substring(id.IndexOf('[') + 1, id.LastIndexOf(']'));
+                this.properties = new Dictionary<string, string>();
+                string properties = id.Substring(id.IndexOf('[') + 1, id.LastIndexOf(']') - id.IndexOf('[') - 1);
                 properties = properties.Replace(", ", ",");
                 string[] pros = properties.Split(",");
                 foreach (string pro in pros)
@@ -39,6 +40,22 @@ namespace Ice_Highway_Helper.IceHighway
                 this.id = getId(id);
                 this.properties = null;
             }
+        }
+
+        public CompoundTag getTag()
+        {
+            CompoundTag tag = new CompoundTag(null);
+            tag.Add(new StringTag("Name", id));
+            if (properties != null)
+            {
+                CompoundTag pro = new CompoundTag("Properties");
+                foreach (string key in properties.Keys)
+                {
+                    pro.Add(new StringTag(key, properties[key]));
+                }
+                tag.Add(pro);
+            }
+            return tag;
         }
 
         public override int GetHashCode()
