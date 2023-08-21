@@ -140,7 +140,7 @@ namespace Ice_Highway_Helper.IceHighway
                 return;
             }
 
-            if (Math.Abs(x0 - x1) + Math.Abs(z0 - z1) < 4)
+            if (Math.Abs(x0 - x1) + Tools.GetMinecraftDeg(Math.Abs(z0 - z1)) < 4)
             {
                 MessageBox.Show("两地距离过短！", "警告", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
@@ -153,7 +153,8 @@ namespace Ice_Highway_Helper.IceHighway
             HighwayInformation d = iceHighway.Build(interval, ice, button, new Calculation(x0, z0, x1, z1, checkBox1.Checked));
 
             label_deviation.Text = "偏差：" + d.deviation;
-            label_angle.Text = "角度：" + d.buildDeg + "°，返程：" + Tools.GetOppositeDeg(d.buildDeg) + "°";
+            label_angle.Text = "角度：" + Tools.GetMinecraftDeg(d.buildDeg) + "°，返程：" +
+                Tools.GetMinecraftDeg(Tools.GetOppositeDeg(d.buildDeg)) + "°";
             label_endPosition.Text = "终点坐标：(" + d.endpoint.x + ", " + d.endpoint.z + ")";
 
             button2.Enabled = d.deviation > 4.0;
@@ -171,8 +172,10 @@ namespace Ice_Highway_Helper.IceHighway
                     new Calculation(x0, z0, x1, z1, false), ice, button);
 
             label_crossPosition.Text = "交点坐标：(" + d.cross.x + ", " + d.cross.z + ")";
-            label_angle_1.Text = "第1段角度：" + d.angle0 + "°，返程：" + Tools.GetOppositeDeg(d.angle0) + "°";
-            label_angle_2.Text = "第2段角度：" + d.angle1 + "°，返程：" + Tools.GetOppositeDeg(d.angle1) + "°";
+            label_angle_1.Text = "第1段角度：" + Tools.GetMinecraftDeg(d.angle0) + "°，返程：" + 
+                Tools.GetMinecraftDeg(Tools.GetOppositeDeg(d.angle0)) + "°";
+            label_angle_2.Text = "第2段角度：" + Tools.GetMinecraftDeg(Tools.GetOppositeDeg(d.angle1)) + 
+                "°，返程：" + Tools.GetMinecraftDeg(d.angle1) + "°";
         }
 
         private void button_saveLitematic_Click(object sender, EventArgs e)
