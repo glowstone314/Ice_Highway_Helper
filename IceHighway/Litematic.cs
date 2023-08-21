@@ -104,7 +104,8 @@ namespace Ice_Highway_Helper.IceHighway
                 region.blocks[0] = ice;
                 region.blocks[1] = button;
             }
-            regions.Add("交点", region);
+            if (regions.ContainsKey("交点")) regions["交点"] = region;
+            else regions.Add("交点", region);
         }
     }
 

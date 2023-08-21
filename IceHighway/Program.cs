@@ -14,8 +14,8 @@ namespace Ice_Highway_Helper.IceHighway
             // To customize application configuration such as set high DPI settings or default font,
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
-            //Application.Run(new Form());
-            int begX = -5;
+            Application.Run(new Form());
+            /*int begX = -5;
             int begZ = 9;
             int endX = 70;
             int endZ = 405;
@@ -28,7 +28,7 @@ namespace Ice_Highway_Helper.IceHighway
             CompoundTag tag = litematic.BuildLitematic();
             NbtFile.Write("D:\\Minecraft\\schematics\\±ùµÀ²âÊÔ.litematic", tag, 
                     FormatOptions.Java, CompressionType.GZip, 
-                    System.IO.Compression.CompressionLevel.Fastest);
+                    System.IO.Compression.CompressionLevel.Fastest);*/
         }
     }
 }
