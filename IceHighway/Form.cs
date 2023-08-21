@@ -146,7 +146,6 @@ namespace Ice_Highway_Helper.IceHighway
                 return;
             }
 
-            iceHighway = null;
             iceHighway = new IceHighway("冰道", "由冰道助手生成的冰道", "Ice_Highway_Helper");
             int interval = (comboBox3.SelectedIndex == 0 ? 1 : 2);
             Block ice = GetIceBlock();
@@ -163,6 +162,7 @@ namespace Ice_Highway_Helper.IceHighway
 
         private void button2_Click(object sender, EventArgs e)
         {
+            iceHighway = new IceHighway("冰道", "由冰道助手生成的冰道", "Ice_Highway_Helper");
             int interval = (comboBox3.SelectedIndex == 0 ? 1 : 2);
             Block ice = GetIceBlock();
             Block button = GetButtonBlock();
