@@ -10,9 +10,7 @@ namespace Ice_Highway_Helper.IceHighway
     {
 
         public string author, description, name;
-        //private int minX, minY, minZ, maxX, maxY, maxZ;
         private Dictionary<string, LiteRegion> regions;
-        //private Hashtable blocks;
 
         public Litematic(string name, string description, string author)
         {
@@ -24,16 +22,6 @@ namespace Ice_Highway_Helper.IceHighway
 
         public void AddIceBlocks(List<V3d> list, Block ice, Block button)
         {
-            /*if (button != null)
-            {
-                if (0 < minY) minY = 0;
-                if (1 > maxY) maxY = 1;
-            }
-            else
-            {
-                if (0 < minY) minY = 0;
-                else if (0 > maxY) maxY = 0;
-            }*/
             V3d begin = list[0];
             V3d end = list[list.Count - 1];
             int shorterSide = Min(Abs(begin.x - end.x), Abs(begin.z - end.z));
@@ -45,12 +33,12 @@ namespace Ice_Highway_Helper.IceHighway
                     int localBegIndex = list.Count * i / count;
                     int localEndIndex = list.Count * (i + 1) / count - 1;
                     regions.Add(regions.Count.ToString(), 
-                        new LiteRegion(list, localBegIndex, localEndIndex, begin, ice, button));
+                        new LiteRegion(list, localBegIndex, localEndIndex, ice, button));
                 }
             }
             else
             {
-                regions.Add(regions.Count.ToString(), new LiteRegion(list, 0, list.Count - 1, begin, ice, button));
+                regions.Add(regions.Count.ToString(), new LiteRegion(list, 0, list.Count - 1, ice, button));
             }
         }
 
@@ -58,11 +46,13 @@ namespace Ice_Highway_Helper.IceHighway
         {
             CompoundTag root = new CompoundTag("");
 
-            CompoundTag data = new CompoundTag("Metadata");
-            data.Add(new StringTag("Author", author));
-            data.Add(new StringTag("Description", description));
-            data.Add(new StringTag("Name", name));
-            data.Add(new IntTag("RegionCount", this.regions.Count));
+            CompoundTag data = new CompoundTag("Metadata")
+            {
+                new StringTag("Author", author),
+                new StringTag("Description", description),
+                new StringTag("Name", name),
+                new IntTag("RegionCount", this.regions.Count)
+            };
             long now = GetTimeStamp();
             data.Add(new LongTag("TimeCreated", now));
             data.Add(new LongTag("TimeModified", now));
@@ -82,14 +72,48 @@ namespace Ice_Highway_Helper.IceHighway
             return root;
         }
 
+        public void SetBlock(V3d realPosition, Block block)
+        {
+            foreach (LiteRegion region in regions.Values)
+            {
+                region.SetBlockByRealPosition(realPosition, block);
+            }
+        }
+
+        public void Adjust(V3d offset)
+        {
+            foreach (LiteRegion region in regions.Values)
+            {
+                region.posX -= offset.x;
+                region.posY -= offset.y;
+                region.posZ -= offset.z;
+            }
+        }
+
+        public void SetMiddleBlock(V3d pos, Block ice, Block button)
+        {
+            LiteRegion region;
+            if (null == button)
+            {
+                region = new LiteRegion(pos, pos);
+                region.blocks[0] = ice;
+            }
+            else
+            {
+                region= new LiteRegion(pos, pos.getNewV3d(0, 1, 0));
+                region.blocks[0] = ice;
+                region.blocks[1] = button;
+            }
+            regions.Add("交点", region);
+        }
     }
 
     internal class LiteRegion
     {
-        private int posX, posY, posZ;
-        private int sizeX, sizeY, sizeZ;
-        private V3d origin;     // “三轴坐标均为最小”的原点
-        private Block[] blocks;
+        internal int posX, posY, posZ;
+        internal int sizeX, sizeY, sizeZ;
+        internal V3d origin;     // “三轴坐标均为最小”的原点
+        internal Block[] blocks;
 
         public int GetSize(int end, int beg)
         {
@@ -110,7 +134,7 @@ namespace Ice_Highway_Helper.IceHighway
         }
 
         public LiteRegion(List<V3d> list, int localBegIndex, int localEndIndex, 
-                V3d offset, Block ice, Block button)
+                Block ice, Block button)
         {
             V3d begin = list[localBegIndex];
             V3d end = list[localEndIndex];
@@ -126,12 +150,6 @@ namespace Ice_Highway_Helper.IceHighway
                 SetBlockByRealPosition(list[i], ice);
                 if (button != null) SetBlockByRealPosition(list[i].getNewV3d(0, 1, 0), button);
             }
-            posX -= offset.x;
-            posY -= offset.y;
-            posZ -= offset.z;
-            origin.x -= offset.x;
-            origin.y -= offset.y;
-            origin.z -= offset.z;
         }
 
         public bool SetBlock(int x, int y, int z, Block block)
@@ -239,20 +257,26 @@ namespace Ice_Highway_Helper.IceHighway
         {
             CompoundTag tag = new CompoundTag(name);
 
-            CompoundTag pos = new CompoundTag("Position");
-            pos.Add(new IntTag("x", posX));
-            pos.Add(new IntTag("y", posY));
-            pos.Add(new IntTag("z", posZ));
+            CompoundTag pos = new CompoundTag("Position")
+            {
+                new IntTag("x", posX),
+                new IntTag("y", posY),
+                new IntTag("z", posZ)
+            };
             tag.Add(pos);
-            CompoundTag size = new CompoundTag("Size");
-            size.Add(new IntTag("x", sizeX));
-            size.Add(new IntTag("y", sizeY));
-            size.Add(new IntTag("z", sizeZ));
+            CompoundTag size = new CompoundTag("Size")
+            {
+                new IntTag("x", sizeX),
+                new IntTag("y", sizeY),
+                new IntTag("z", sizeZ)
+            };
             tag.Add(size);
 
             ListTag paletteL = new ListTag("BlockStatePalette", TagType.Compound);
-            Dictionary<Block, int> paletteD = new Dictionary<Block, int>();
-            paletteD.Add(Block.air, 0);
+            Dictionary<Block, int> paletteD = new Dictionary<Block, int>
+            {
+                { Block.air, 0 }
+            };
             paletteL.Add(Block.air.getTag());
             for (int i = 0; i < blocks.Length; i++)
             {

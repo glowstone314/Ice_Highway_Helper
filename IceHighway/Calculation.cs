@@ -21,14 +21,14 @@ namespace Ice_Highway_Helper.IceHighway
             this.deg140625 = deg140625;
             // 转换为船稳定后的角度
             if (deg140625)
-                deg = Round(getDeg(Atan2(z1 - z0, x1 - x0)) / 1.40625) * 1.40625;
+                deg = Round(Tools.GetDeg(Atan2(z1 - z0, x1 - x0)) / 1.40625) * 1.40625;
             else
-                deg = getDeg(Atan2(z1 - z0, x1 - x0));
+                deg = Tools.GetDeg(Atan2(z1 - z0, x1 - x0));
             // x比z长，就以x坐标求z坐标
             getZbyX = Abs(x0 - x1) > Abs(z0 - z1);
         }
 
-        public double getRealDeg() {
+        public double GetDeg() {
             return deg;
         }
 
@@ -44,11 +44,11 @@ namespace Ice_Highway_Helper.IceHighway
                 }
                 else if ( getZbyX )
                 {
-                    return new V3d(x0 + dx, 0, z0 + dx * Tan(getRad(deg)));
+                    return new V3d(x0 + dx, 0, z0 + dx * Tan(GetRad(deg)));
                 }
                 else
                 {
-                    return new V3d(x0 + dz / Tan(getRad(deg)), 0, z0 + dz);
+                    return new V3d(x0 + dz / Tan(GetRad(deg)), 0, z0 + dz);
                 }
             }
             else
@@ -72,6 +72,27 @@ namespace Ice_Highway_Helper.IceHighway
                     return new V3d(x, 0, z0 + dz);
                 }
             }
+        }
+
+        public double GetX0()
+        {
+            return x0;
+        }
+        public double GetX1()
+        {
+            return x1;
+        }
+        public double GetZ0()
+        {
+            return z0;
+        }
+        public double GetZ1()
+        {
+            return z1;
+        }
+        public bool GetDeg140625()
+        {
+            return deg140625;
         }
     }
 }
