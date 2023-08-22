@@ -145,6 +145,13 @@ namespace Ice_Highway_Helper.IceHighway
                 MessageBox.Show("两地距离过短！", "警告", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
+            if (Math.Abs(x0) > 30000000 || Math.Abs(x1) > 30000000 
+                    || Math.Abs(z0) > 30000000 || Math.Abs(z1) > 30000000)
+            {
+                MessageBox.Show("坐标超过限制：±30,000,000！", "警告", 
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
 
             iceHighway = new IceHighway("冰道", "由冰道助手生成的冰道", "Ice_Highway_Helper");
             int interval = (comboBox3.SelectedIndex == 0 ? 1 : 2);

@@ -30,8 +30,8 @@ namespace Ice_Highway_Helper.IceHighway
                 int count = (shorterSide * 2 / 16 + 1) / 2;
                 for (int i = 0; i < count; i++)
                 {
-                    int localBegIndex = list.Count * i / count;
-                    int localEndIndex = list.Count * (i + 1) / count - 1;
+                    int localBegIndex = (int)(1L * list.Count * i / count);
+                    int localEndIndex = (int)(list.Count * (i + 1L) / count - 1);
                     regions.Add(regions.Count.ToString(), 
                         new LiteRegion(list, localBegIndex, localEndIndex, ice, button));
                 }
