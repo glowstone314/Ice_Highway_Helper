@@ -88,7 +88,7 @@ namespace Ice_Highway_Helper.IceHighway
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (comboBox1.SelectedIndex == 3)
+            if (comboBox1.SelectedItem.Equals("<自定义>"))
                 text_iceBlock.ReadOnly = false;
             else
                 text_iceBlock.ReadOnly = true;
@@ -96,7 +96,7 @@ namespace Ice_Highway_Helper.IceHighway
 
         private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (comboBox2.SelectedIndex == 4)
+            if (comboBox2.SelectedItem.Equals("<自定义>"))
                 text_buttonBlock.ReadOnly = false;
             else
                 text_buttonBlock.ReadOnly = true;
@@ -140,7 +140,7 @@ namespace Ice_Highway_Helper.IceHighway
                 return;
             }
 
-            if (Math.Abs(x0 - x1) + Tools.GetMinecraftDeg(Math.Abs(z0 - z1)) < 4)
+            if (Math.Abs(x0 - x1) + Math.Abs(z0 - z1) < 4)
             {
                 MessageBox.Show("两地距离过短！", "警告", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
@@ -232,6 +232,28 @@ namespace Ice_Highway_Helper.IceHighway
                 case 1: return new Block("polished_blackstone_button[face=floor,facing=north,powered=false]");
                 case 2: return new Block("stone_pressure_plate[powered=false]");
                 case 3: return new Block("polished_blackstone_pressure_plate[powered=false]");
+                case 4: return new Block("oak_button[face=floor,facing=north,powered=false]");
+                case 5: return new Block("spruce_button[face=floor,facing=north,powered=false]");
+                case 6: return new Block("birch_button[face=floor,facing=north,powered=false]");
+                case 7: return new Block("jungle_button[face=floor,facing=north,powered=false]");
+                case 8: return new Block("acacia_button[face=floor,facing=north,powered=false]");
+                case 9: return new Block("dark_oak_button[face=floor,facing=north,powered=false]");
+                case 10: return new Block("mangrove_button[face=floor,facing=north,powered=false]");
+                case 11: return new Block("cherry_button[face=floor,facing=north,powered=false]");
+                case 12: return new Block("bamboo_button[face=floor,facing=north,powered=false]");
+                case 13: return new Block("crimson_button[face=floor,facing=north,powered=false]");
+                case 14: return new Block("warped_button[face=floor,facing=north,powered=false]");
+                case 15: return new Block("oak_pressure_plate[powered=false]");
+                case 16: return new Block("spruce_pressure_plate[powered=false]");
+                case 17: return new Block("birch_pressure_plate[powered=false]");
+                case 18: return new Block("jungle_pressure_plate[powered=false]");
+                case 19: return new Block("acacia_pressure_plate[powered=false]");
+                case 20: return new Block("dark_oak_pressure_plate[powered=false]");
+                case 21: return new Block("mangrove_pressure_plate[powered=false]");
+                case 22: return new Block("cherry_pressure_plate[powered=false]");
+                case 23: return new Block("bamboo_pressure_plate[powered=false]");
+                case 24: return new Block("crimson_pressure_plate[powered=false]");
+                case 25: return new Block("warped_pressure_plate[powered=false]");
                 default: return new Block(text_buttonBlock.Text);
             }
         }

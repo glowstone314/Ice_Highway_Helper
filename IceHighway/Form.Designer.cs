@@ -314,11 +314,21 @@
             comboBox2.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             comboBox2.DropDownStyle = ComboBoxStyle.DropDownList;
             comboBox2.FormattingEnabled = true;
-            comboBox2.Items.AddRange(new object[] { "石头按钮", "磨制黑石按钮", "石头压力板", "磨制黑石压力板", "<自定义>" });
+            comboBox2.Items.AddRange(new object[] 
+            { 
+                "石头按钮", "磨制黑石按钮", "石头压力板", "磨制黑石压力板", 
+                "橡木按钮", "云杉木按钮", "白桦木按钮", "从林木按钮", "金合欢木按钮", "深色橡木按钮", 
+                "红树木按钮", "樱花木按钮", "竹按钮", "绯红木按钮", "诡异木按钮",
+                "橡木压力板", "云杉木压力板", "白桦木压力板", "从林木压力板", "金合欢木压力板", "深色橡木压力板",
+                "红树木压力板", "樱花木压力板", "竹压力板", "绯红木压力板", "诡异木压力板",
+                "<自定义>" 
+            });
             comboBox2.Location = new Point(354, 141);
             comboBox2.Name = "comboBox2";
             comboBox2.Size = new Size(240, 46);
             comboBox2.TabIndex = 7;
+            comboBox2.IntegralHeight = false;
+            comboBox2.MaxDropDownItems = 8;
             comboBox2.SelectedIndexChanged += comboBox2_SelectedIndexChanged;
             // 
             // comboBox1
