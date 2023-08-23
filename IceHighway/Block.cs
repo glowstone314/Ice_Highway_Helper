@@ -1,11 +1,4 @@
 ﻿using SharpNBT;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
 
 namespace Ice_Highway_Helper.IceHighway
 {
@@ -71,7 +64,10 @@ namespace Ice_Highway_Helper.IceHighway
             if (this == obj) return true;
             if (obj == null || GetType() != obj.GetType()) return false;
             Block block = (Block) obj;
-            return id.Equals(block.id) && properties.Equals(block.properties);
+            if (block.properties != null)
+                return id.Equals(block.id) && properties.Equals(block.properties);
+            else
+                return id.Equals(block.id);
         }
 
         // 自动加上默认前缀

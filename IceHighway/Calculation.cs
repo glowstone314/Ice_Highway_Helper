@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using static System.Math;
+﻿using static System.Math;
 using static Ice_Highway_Helper.IceHighway.Tools;
 
 namespace Ice_Highway_Helper.IceHighway
@@ -59,7 +58,7 @@ namespace Ice_Highway_Helper.IceHighway
                     {
                         return new V3d(x0 + dx, 0, z0);
                     }
-                    double z = (z1 - z0) * index / (x1 - x0) + z0;
+                    double z = Abs((z1 - z0) / (x1 - x0)) * dz + z0;
                     return new V3d(x0 + dx, 0, z);
                 }
                 else
@@ -68,7 +67,7 @@ namespace Ice_Highway_Helper.IceHighway
                     {
                         return new V3d(x0, 0, z0 + dz);
                     }
-                    double x = (x1 - x0) * index / (z1 - z0) + x0;
+                    double x = Abs((x1 - x0) / (z1 - z0)) * dx + x0;
                     return new V3d(x, 0, z0 + dz);
                 }
             }

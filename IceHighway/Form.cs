@@ -196,6 +196,7 @@ namespace Ice_Highway_Helper.IceHighway
                 sfd.Filter = "投影文件 | *.litematic";
                 sfd.ShowDialog();
                 string path = sfd.FileName;
+                if (path == "") return;
 
                 try
                 {
@@ -254,6 +255,7 @@ namespace Ice_Highway_Helper.IceHighway
                 case 23: return new Block("bamboo_pressure_plate[powered=false]");
                 case 24: return new Block("crimson_pressure_plate[powered=false]");
                 case 25: return new Block("warped_pressure_plate[powered=false]");
+                case 26: return null;
                 default: return new Block(text_buttonBlock.Text);
             }
         }

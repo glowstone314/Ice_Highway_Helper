@@ -1,8 +1,6 @@
 ﻿using SharpNBT;
-using System.Collections;
 using static System.Math;
 using static Ice_Highway_Helper.IceHighway.Tools;
-using System.Diagnostics;
 
 namespace Ice_Highway_Helper.IceHighway
 {

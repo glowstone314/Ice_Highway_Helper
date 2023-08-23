@@ -9,7 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="SharpNBT\SharpNBT.csproj" />
+    <PackageReference Include="SharpNBT" Version="1.2.0" />
   </ItemGroup>
 
 </Project>

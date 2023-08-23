@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using static System.Math;
+﻿using static System.Math;
 using static Ice_Highway_Helper.IceHighway.Tools;
 
 namespace Ice_Highway_Helper.IceHighway
