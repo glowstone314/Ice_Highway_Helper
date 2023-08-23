@@ -264,7 +264,7 @@ namespace Ice_Highway_Helper.IceHighway
         {
             if ((int)MessageBox.Show(
                     "Ice_Highway_Helper 冰道助手\n" +
-                    "Version alpha 0\n" +
+                    "Version 1.0.0\n" +
                     "by Glow_Creeper\n\n" +
                     "打开github页面？",
                     "关于", MessageBoxButtons.YesNo, MessageBoxIcon.Information
